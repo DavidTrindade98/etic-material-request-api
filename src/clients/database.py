@@ -19,6 +19,12 @@ def get_request_id(requested_id:int)->PublicRequestsDB:
         raise Exception("request does not exist")
     return result
 
+def get_all_requests():
+    with Session(engine) as db:
+        query = select(PublicRequestsDB)
+        result = db.scalars(query).all()
+    return list(result)
+
 def update_request_id():
     pass
 

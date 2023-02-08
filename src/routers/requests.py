@@ -2,10 +2,11 @@ from fastapi import APIRouter,status, Response
 from src.models.api import PublicRequestsAPI
 from src.controllers import RequestLogic
 
+
 router = APIRouter(prefix="/request", tags=["Requests"])
 
 @router.post("", status_code=status.HTTP_201_CREATED)
-async def create_request(request_api_model: PublicRequestsAPI, response:Response):
+async def create_request_endpoint(request_api_model: PublicRequestsAPI, response:Response):
     try:
         RequestLogic.create_request(request_api_model=request_api_model)
     except Exception as exc:
@@ -14,20 +15,23 @@ async def create_request(request_api_model: PublicRequestsAPI, response:Response
 
 #receber Lista de todos os pedidos
 @router.get("/", status_code=status.HTTP_200_OK)
-def get_all_requests():
-    pass
+def get_all_requests_endpoint():
+    result:list = RequestLogic.get_all()
+    if not result:
+        return "No Requests Registred"
+    return result
 
 @router.get("/{REQUEST_ID}", status_code=status.HTTP_200_OK)
-def get_request_id():   
+def get_request_id_endpoint():   
     pass
 
 #receber Lista material disponivel , Id request
 @router.get("", status_code=status.HTTP_200_OK)
-def get_available_material():
+def get_available_material_endpoint():
     pass
 
 @router.patch("/{REQUEST_ID}", status_code=status.HTTP_202_ACCEPTED)
-def update_request_id():
+def update_request_id_endpoint():
     pass
 
 
