@@ -11,18 +11,18 @@ def create_request(public_requests_api_Model:PublicRequestsAPI):
         session.add(new_request)
         session.commit()
 
-def get_request_id(requested_id:int)->PublicRequestsDB:
-    with Session(engine) as db:
-        query = select(PublicRequestsDB).where(PublicRequestsDB.id == requested_id)
-        result = db.scalar(query).one()
-    if not result:
-        raise Exception("request does not exist")
-    return result
-
 def get_all_requests():
     with Session(engine) as db:
         query = select(PublicRequestsDB)
         result = db.scalars(query).all()
+    return list(result)
+
+def get_request_id(REQUEST_ID:int)->PublicRequestsDB:
+    with Session(engine) as db:
+        query = select(PublicRequestsDB).where(PublicRequestsDB.id == REQUEST_ID)
+        result = db.scalar(query).one()
+    if not result:
+        raise Exception("request does not exist")
     return list(result)
 
 def update_request_id():

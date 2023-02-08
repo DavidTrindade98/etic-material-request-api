@@ -1,7 +1,8 @@
 from fastapi import APIRouter,status, Response
 from src.models.api import PublicRequestsAPI
 from src.controllers import RequestLogic
-
+from sqlalchemy import select
+from src.clients import database
 
 router = APIRouter(prefix="/request", tags=["Requests"])
 
@@ -22,9 +23,11 @@ def get_all_requests_endpoint():
     return result
 
 @router.get("/{REQUEST_ID}", status_code=status.HTTP_200_OK)
-def get_request_id_endpoint():   
-    pass
-
+def get_request_id_endpoint(REQUEST_ID:int):
+    result:list = RequestLogic.get_single_request_id()
+    return result
+  
+    
 #receber Lista material disponivel , Id request
 @router.get("", status_code=status.HTTP_200_OK)
 def get_available_material_endpoint():

@@ -7,3 +7,6 @@ def create_request(request_api_model: PublicRequestsAPI):
 
 def get_all():
     return database.get_all_requests()
+
+def get_single_request_id():
+    return database.get_request_id()
