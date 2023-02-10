@@ -1,5 +1,5 @@
 from fastapi import APIRouter,status, Response
-from src.models.api import PublicRequestsAPI
+from src.models.api import PublicRequestsAPI, UpdateRequest
 from src.controllers import RequestLogic
 
 router = APIRouter(prefix="/request", tags=["Requests"])
@@ -33,10 +33,13 @@ def get_available_material_endpoint():
         return "No Items Available"
     return result
 
-
 @router.patch("/{REQUEST_ID}", status_code=status.HTTP_202_ACCEPTED)
-def update_request_id_endpoint(REQUEST_ID:int, ):
-    result:list = RequestLogic.update_single_request_id(REQUEST_ID)
+def update_request_id_endpoint(REQUEST_ID:int, request_api_model: UpdateRequest):
+    result:list = RequestLogic.update_single_request_id(REQUEST_ID, request_api_model)
+    if not result:
+        return "Cant update request"
     return result
+
+
 
 

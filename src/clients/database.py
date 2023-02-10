@@ -1,9 +1,10 @@
 from src.models.database import PublicRequestsDB, PublicInventoryDB, PublicRequestsInventoryDB
 from src.models.database import engine
-from src.models.api import PublicRequestsAPI
+from src.models.api import PublicRequestsAPI, UpdateRequest
 from sqlalchemy.orm import Session
 from dataclasses import asdict
 from sqlalchemy import select, update
+import json
 
 def create_request(public_requests_api_Model:PublicRequestsAPI):
     with Session(engine) as session:
@@ -27,14 +28,32 @@ def get_request_id(REQUEST_ID:int)->PublicRequestsDB:
 
 #atualizar campo delivered
 # buscar todas as
-# update table 
-def update_request_id(REQUEST_ID:int)->PublicRequestsDB:
+# update table
+
+def update_request_id(REQUEST_ID:int, public_requests_api_Model:UpdateRequest)->PublicRequestsDB:
     with Session(engine) as db:
         query = select(PublicRequestsDB).where(PublicRequestsDB.id == REQUEST_ID)
-        result = db.scalars(query).one()
-    if not result:
-        raise Exception("cant update request")
-    return result
+        old_request = db.scalars(query).one()
+        
+        update_request = UpdateRequest(**public_requests_api_Model.dict())
+
+        if update_request.requester != str(getattr(old_request, "requester")):
+            setattr(old_request, "requester", update_request.requester)
+        
+        if update_request.end_datetime != str(getattr(old_request, "end_datetime")):
+            setattr(old_request, "end_datetime", update_request.end_datetime)
+
+        if update_request.subject != str(getattr(old_request, "subject")):
+            setattr(old_request, "subject", update_request.subject)
+
+        if update_request.observations != str(getattr(old_request, "observations")):
+            setattr(old_request, "observations", update_request.observations)
+
+        db.add(old_request)
+        db.commit()
+        db.refresh(old_request)
+
+        return old_request
 
 #material requisitado nao estar delivered
 #filtrar sku para ver se é maior que 0

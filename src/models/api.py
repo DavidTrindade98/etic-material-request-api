@@ -9,7 +9,13 @@ class PublicRequestsAPI(BaseModel):
     end_datetime: datetime
     subject: str
     context: str
-    observations: str 
+    observations: str
+
+class UpdateRequest(BaseModel):
+    requester: str
+    end_datetime: datetime
+    subject: str
+    observations: str  
 
 class PublicInventoryGroupAPI(BaseModel):
 

@@ -1,5 +1,5 @@
 from src.clients import database
-from src.models.api import PublicRequestsAPI
+from src.models.api import PublicRequestsAPI, UpdateRequest
 
 
 def create_request(request_api_model: PublicRequestsAPI):
@@ -11,8 +11,8 @@ def get_all():
 def get_single_request_id(REQUEST_ID):
     return database.get_request_id(REQUEST_ID)
 
-def update_single_request_id(REQUEST_ID):
-    return database.update_request_id(REQUEST_ID)
+def update_single_request_id(REQUEST_ID, request_api_model: UpdateRequest):
+    return database.update_request_id(REQUEST_ID, request_api_model)
 
 def get_all_available_material():
     return database.get_avaliable_material()
